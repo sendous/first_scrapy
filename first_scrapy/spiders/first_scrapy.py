@@ -1,4 +1,6 @@
-import scrapy, csv
+import scrapy
+from scrapy.loader import ItemLoader
+from ..items import DeadCoins
 from first_scrapy.items import Article, DeadCoins, Coins
 
 
@@ -36,16 +38,14 @@ class firstSpider(scrapy.Spider):
 
     def parse(self, response, **kwargs):
         for deadcoins in response.css(".list > tr"):
-            item = DeadCoins()
-            item['name'] = deadcoins.css(
-                "td.nnbitcoins-deadcoins-list-item-name::text").extract()
-            item['ticker'] = deadcoins.css(
-                "td.nnbitcoins-deadcoins-list-item-ticker::text,\
-                 td.nnbitcoins-deadcoins-list-item-ticker > *::text")\
-                .extract()
-            item['death_indicators'] = deadcoins.css(
-                "td.nnbitcoins-deadcoins-list-item-death-indicators > ul > li > a::text").extract()
-            yield item
+            loader = ItemLoader(item=DeadCoins(), selector=deadcoins)
+            loader.add_css('name', 'td.nnbitcoins-deadcoins-list-item-name::text')
+            loader.add_css('ticker', 'td.nnbitcoins-deadcoins-list-item-ticker::text,\
+                                        td.nnbitcoins-deadcoins-list-item-ticker > *::text')
+            loader.add_css('death_indicators', 'td.nnbitcoins-deadcoins-list-item-death-indicators > ul > li > a::text')
+            yield loader.load_item()
+
+
 
         # next_page = response.css("#example_paginate > a#example_next::attr('href')")
         # if next_page:

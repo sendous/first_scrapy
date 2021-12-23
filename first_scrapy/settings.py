@@ -8,8 +8,8 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 BOT_NAME = 'first_scrapy'
-FEED_URI = 'W3school_%(time)s.csv'
-FEED_FORMAT = 'csv'
+FEED_URI = 'scrapy.json'
+FEED_FORMAT = 'json'
 FEED_EXPORT_ENCODING = 'utf-8'
 ROBOTSTXT_OBEY = True
 
